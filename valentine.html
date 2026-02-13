@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abi 💖</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'Segoe UI', cursive;
+}
+
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4,#ffd1ff);
+  background-size: 300% 300%;
+  animation: gradientMove 12s ease infinite;
+}
+
+@keyframes gradientMove{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+.card{
+  background:rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  width:90%;
+  max-width:420px;
+  padding:35px;
+  border-radius:25px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,0.2);
+  position:relative;
+  overflow:hidden;
+}
+
+h1{
+  color:#d63384;
+  margin-bottom:15px;
+}
+
+h2{
+  color:#ad1457;
+  margin-bottom:20px;
+}
+
+button{
+  padding:12px 25px;
+  font-size:16px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+#yesBtn{
+  background:linear-gradient(45deg,#ff4d6d,#ff758f);
+  color:white;
+  margin:10px;
+  box-shadow:0 5px 15px rgba(255,77,109,0.4);
+}
+
+#yesBtn:hover{
+  transform:scale(1.05);
+}
+
+#noBtn{
+  background:#eee;
+  position:absolute;
+}
+
+#teaseText{
+  margin-top:20px;
+  color:#d63384;
+  font-weight:600;
+  min-height:30px;
+  font-size:14px;
+  transition:0.3s;
+}
+
+/* Ring animation */
+.ring{
+  font-size:80px;
+  animation: drop 1s ease forwards;
+}
+
+@keyframes drop{
+  0%{transform:translateY(-200px);}
+  70%{transform:translateY(30px);}
+  100%{transform:translateY(0);}
+}
+
+/* Typewriter */
+.typewriter{
+  font-size:18px;
+  margin-top:20px;
+  max-width:400px;
+}
+
+/* Floating hearts */
+.heart{
+  position:absolute;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float{
+  0%{transform:translateY(100vh) scale(1);}
+  100%{transform:translateY(-10vh) scale(1.5);}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" loop>
+  <source src="kadhale.mp3" type="audio/mp3">
+</audio>
+
+<div class="card">
+  <h1>Abi 💖</h1>
+  <h2>Will you marry me? 💍</h2>
+  <button id="yesBtn" onclick="sayYes()">Yes ❤️</button>
+  <button id="noBtn">No 😏</button>
+  <div id="teaseText"></div>
+</div>
+
+<script>
+
+const noBtn = document.getElementById("noBtn");
+const teaseText = document.getElementById("teaseText");
+const card = document.querySelector(".card");
+const music = document.getElementById("bgMusic");
+
+const messages = [
+"Maybe your heart just needs a little time 🥺💕",
+
+"I’ll wait patiently for my yes 😌💖",
+
+"It’s okay, I’ll keep choosing you anyway 🌸",
+
+"I think you’re worth asking again someday 🥰",
+
+"I’m not giving up on something this cute 💕",
+
+"You say no, but your smile says maybe 😌",
+
+"I’ll be right here when you’re ready 💖",
+
+"I believe in us a little too much 🥺",
+
+"That’s okay, I like slow love stories 🌷",
+
+"I don’t mind waiting for something special 💕",
+
+"You’re too adorable to give up on 😌",
+
+"Maybe I just need to love you a little louder 💖",
+
+"No worries, I’ll try again with extra cuteness 🥰",
+
+"Your heart will whisper yes one day 🌸",
+
+"I’ll keep saving a space for you 💕",
+
+"Even your no sounds sweet to me 🥺",
+
+"I’ll keep hoping softly 😌💖",
+
+"I think we’d look cute together though 🥰",
+
+"Take your time, I’m not going anywhere 🌷",
+
+"I still choose you, every time 💕",
+
+"Sometimes love needs a second question ❤️",
+
+"My heart still says it’s you 🌹",
+
+"I’ll wait until your heart feels the same 💖",
+
+"Some stories just take time to unfold ✨",
+
+"I see something beautiful in us 💕",
+
+"Even your no can’t quiet my feelings 🌙",
+
+"Maybe destiny is just being patient with us 💫",
+
+"I’m willing to grow into your yes 🌷",
+
+"Love doesn’t rush, it gently waits ❤️",
+
+"My feelings aren’t going anywhere 🌹",
+
+"You’re still the person I’d choose 💖",
+
+"I believe in what I feel for you ✨",
+
+"I’ll hold onto this hope softly 💕",
+
+"Some hearts just need reassurance 🌙",
+
+"I’ll keep loving you quietly 💖",
+
+"I don’t mind proving my love over time 🌹",
+
+"Maybe today is no, but tomorrow is ours 💫",
+
+"You’re worth every patient heartbeat ❤️",
+
+"I’ll treasure you, even from here 💕",
+
+"If love is meant to be, it will find its way 💖",
+];
+
+let messageIndex = 0;
+
+noBtn.style.left = "60%";
+noBtn.style.top = "65%";
+
+noBtn.addEventListener("mouseover", moveButton);
+noBtn.addEventListener("touchstart", function(e){
+  e.preventDefault();
+  moveButton();
+});
+
+function moveButton(){
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
+
+  const maxX = card.offsetWidth - btnWidth - 20;
+  const maxY = card.offsetHeight - btnHeight - 20;
+
+  const randomX = Math.random() * maxX;
+  const randomY = Math.random() * maxY;
+
+  noBtn.style.left = randomX + "px";
+  noBtn.style.top = randomY + "px";
+
+  teaseText.innerText = messages[messageIndex];
+  messageIndex = (messageIndex + 1) % messages.length;
+}
+
+function sayYes(){
+
+  music.play(); // Start music on YES click (mobile safe)
+
+  document.body.innerHTML = `
+  <div style="
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ff758f,#ff99ac);
+  color:white;
+  text-align:center;
+  padding:20px;">
+  
+  <div class="ring">💍</div>
+  <h1 style="margin-top:20px;">You Said YES 💖</h1>
+  <div class="typewriter" id="typeText"></div>
+  </div>
+  `;
+
+  typeWriterEffect();
+}
+
+function typeWriterEffect(){
+  const text = "Abi, from the day I met you, my world became softer and brighter. Your smile feels like peace, your voice feels like home. I promise to stand beside you, love you deeply, and choose you every single day of my life. ❤️";
+  let i = 0;
+  const speed = 45;
+
+  function typing(){
+    if(i < text.length){
+      document.getElementById("typeText").innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typing, speed);
+    }
+  }
+  typing();
+}
+
+/* Floating hearts */
+function createHeart(){
+  const heart = document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML = "💖";
+  heart.style.left = Math.random()*100 + "vw";
+  heart.style.fontSize = (Math.random()*25+15) + "px";
+  document.body.appendChild(heart);
+  setTimeout(()=>{heart.remove();},6000);
+}
+setInterval(createHeart,500);
+
+</script>
+
+</body>
+</html>
